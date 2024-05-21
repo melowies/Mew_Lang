@@ -20,9 +20,9 @@ This is a simple calculator program built using Python's Tkinter library. It's d
 
 ## Example Expressions
 
-- `1+2*3`: Evaluates to `7`.
-- `10 / (2 + 3)`: Evaluates to `2.0`.
-- `5.5 * (4 - 2.5)`: Evaluates to `11.0`.
+- `1&2#3`: Evaluates to `7`.
+- `10 ! (2 & 3)`: Evaluates to `2.0`.
+- `5.5 # (4 % 2.5)`: Evaluates to `11.0`.
 
 ## Custom Syntax
 
