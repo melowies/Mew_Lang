@@ -53,6 +53,7 @@ class TokenType:
     DIVIDE = 'DIVIDE'
     LEFT_PARENTHESIS = 'LEFT_PARENTHESIS'
     RIGHT_PARENTHESIS = 'RIGHT_PARENTHESIS'
+    END_SYMBOL = 'END_SYMBOL'
 
 class Token:
     def __init__(self, type_, value=None, start_position=None, end_position=None):
@@ -114,12 +115,9 @@ class Lexer:
                 self.advance()
                 return [], DotError("'" + character + "'", start_position, self.position)
             elif self.current_character == '|':
-                if self.position.index == len(self.text) - 1:
-                    break
-                else:
-                    start_position = self.position.copy()
-                    self.advance()
-                    return [], IllegalCharError("'" + self.current_character + "'", start_position, self.position)
+                tokens.append(Token(TokenType.END_SYMBOL, start_position=self.position))
+                self.advance()
+                break
             else:
                 start_position = self.position.copy()
                 character = self.current_character
@@ -210,7 +208,10 @@ class Parser:
         return result
 
     def parse(self):
-        return self.expr()
+        result = self.expr()
+        if self.current_token.type != TokenType.END_SYMBOL:
+            raise Exception("Expected END_SYMBOL at the end of the expression")
+        return result
 
 # RUN
 def run_calculator(text):
@@ -220,9 +221,12 @@ def run_calculator(text):
         return None, tokens, None, error
 
     parser = Parser(tokens)
-    result = parser.parse()
-    result_type = TokenType.INTEGER if isinstance(result, int) else TokenType.FLOAT
-    return result, tokens, result_type, None
+    try:
+        result = parser.parse()
+        result_type = TokenType.INTEGER if isinstance(result, int) else TokenType.FLOAT
+        return result, tokens, result_type, None
+    except Exception as e:
+        return None, tokens, None, Error("Parsing Error", str(e), None, None)
 
 # MAIN
 def main():
