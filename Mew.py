@@ -127,7 +127,7 @@ class Lexer:
         if len(self.text) == 0 or self.text[-1] != '|':
             start_position = self.position.copy()
             end_position = self.position.copy()
-            return [], WrongEndError("You should add '|' at the end of your expression.",start_position, end_position)
+            return [], WrongEndError("You should add '|' at the end of your expression.", start_position, end_position)
 
         return tokens, None
 
@@ -166,10 +166,7 @@ class Parser:
 
     def factor(self):
         token = self.current_token
-        if token.type == TokenType.INTEGER:
-            self.advance()
-            return token.value
-        elif token.type == TokenType.FLOAT:
+        if token.type in (TokenType.INTEGER, TokenType.FLOAT):
             self.advance()
             return token.value
         elif token.type == TokenType.LEFT_PARENTHESIS:
