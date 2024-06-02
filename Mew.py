@@ -71,8 +71,8 @@ class Token:
             return f'{self.type}:{self.value}'
         return f'{self.type}'
 
-# LEXER
-class Lexer:
+# LEXEME
+class Lexeme:
     def __init__(self, text):
         self.text = text
         self.position = Position(-1, 0, -1)
@@ -139,7 +139,7 @@ class Lexer:
         while self.current_character is not None and (self.current_character in NUMERIC_DIGITS or (dot_count == 0 and self.current_character == '.')):
             if self.current_character == '.':
                 if dot_count > 1:
-                    Lexer.make_number(self.current_character)
+                    Lexeme.make_number(self.current_character)
                 dot_count += 1
                 number_string += '.'
             else:
@@ -212,8 +212,8 @@ class Parser:
 
 # RUN
 def run_calculator(text):
-    lexer = Lexer(text)
-    tokens, error = lexer.make_tokens()
+    lexeme = Lexeme(text)
+    tokens, error = lexeme.make_tokens()
     if error:
         return None, tokens, None, error
 
